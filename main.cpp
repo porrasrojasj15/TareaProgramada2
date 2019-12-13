@@ -16,6 +16,7 @@ int main(){
 
   deque<Curso> cursos;
   map< string, list<Estudiante> > grupos;
+  list<Grupo> listaGrupos;
 
   Curso curso0("MA0291", "Mate", 5);
   cursos.push_back(curso0);
@@ -50,12 +51,14 @@ int main(){
           cin >> opcion;
           cout << endl;
       }
+
       switch (opcion){
           case 1:
             if(grupos.empty()){
               cout << "No existen grupos." << endl;
             }
             else{
+              cout << "Lista de grupos: " << endl;
               map<string, list<Estudiante> >::iterator itGrupos; //crea iterador
 
               for (itGrupos = grupos.begin(); itGrupos != grupos.end(); itGrupos++){
@@ -72,37 +75,126 @@ int main(){
               }
             }
             break;
+
           case 2:
             if(cursos.empty()){
               cout << "No existen cursos." << endl;
             }
             else{
-              deque<Curso>::iterator itCursos;//crea iterador
+              cout << "Lista de cursos: " << endl;
+              deque<Curso>::iterator itCursos;
               for (itCursos = cursos.begin(); itCursos != cursos.end(); itCursos++){
-                cout << *itCursos; //Imprime los datos de los estudiantes
+                cout << *itCursos << endl;
               }
             }
             break;
+
           case 3:
+
             break;
+
           case 4:
+
             break;
+
           case 5:
+
             break;
-          case 6:
+
+          case 6:{
+            cout << "Por favor ingrese las siglas del curso a borrar:" << endl;
+            string siglasInput;
+            cin >> siglasInput;
+
+            if( grupos.find(siglasInput)->second.empty() ){ //si la lista de estudiantes asociada a ese grupo está vacía
+              grupos.erase(siglasInput);
+
+              list<Grupo>::iterator itGrupos;
+
+              for (itGrupos = listaGrupos.begin(); itGrupos != listaGrupos.end(); itGrupos++){
+                if( siglasInput.compare( itGrupos->getSigla() ) == 0 ){
+                  listaGrupos.erase(itGrupos);
+                  cout << "Se ha borrado el grupo para " << siglasInput << " correctamente." <<endl;
+                }
+              }
+            }
+
+            else{
+              cout << "El grupo tiene estudiantes, el borrado ha fallado." << endl;
+            }
+
+            }
+
             break;
-          case 7:
+
+          case 7:{
+            cout << "Por favor ingrese las siglas del curso a borrar:" << endl;
+            string siglasInput;
+            cin >> siglasInput;
+
+            deque<Curso>::iterator itCursos;
+
+            for (itCursos = cursos.begin(); itCursos != cursos.end(); itCursos++){
+              if( siglasInput.compare( itCursos->getSigla() ) == 0 ){
+                if(grupos.find(siglasInput) != grupos.end()){ //si encontró un grupo con esas siglas
+                  cout << "Existe un grupo para este curso, el borrado ha fallado." << endl;
+                }
+                else{
+                  cursos.erase(itCursos);
+                  cout << "Se ha borrado el curso " << siglasInput << " correctamente." << endl;
+                  break;
+                }
+              }
+            }
+
+
+            }
+
             break;
           case 8:
+
             break;
           case 9:
 
             break;
-          case 10:
-
+          case 10:{
+            cout << "Por favor ingrese las siglas del curso:" << endl;
+            string siglasInput;
+            cin >> siglasInput;
+            cout << "Por favor ingrese el nombre del curso:" << endl;
+            string nombreInput;
+            cin >> nombreInput;
+            cout << "Por favor ingrese la cantidad de créditos del curso:" << endl;
+            int creditosInput;
+            cin >> creditosInput;
+            Curso cursoInput(siglasInput, nombreInput, creditosInput);
+            cursos.push_back(cursoInput);
+            cout << "El curso ha sido añadido exitosamente." << endl;
+            }
             break;
-          case 11:
 
+          case 11:{
+            cout << "Por favor ingrese las siglas del curso:" << endl;
+            string siglasInput;
+            cin >> siglasInput;
+            cout << "Por favor ingrese el nombre del curso:" << endl;
+            string nombreInput;
+            cin >> nombreInput;
+            cout << "Por favor ingrese la cantidad de créditos del curso:" << endl;
+            int creditosInput;
+            cin >> creditosInput;
+            cout << "Por favor ingrese el semestre del curso (I ó II):" << endl;
+            string cicloInput;
+            cin >> cicloInput;
+            cout << "Por favor ingrese el año del curso:" << endl;
+            int anioInput;
+            cin >> anioInput;
+            Grupo grupoInput(siglasInput, nombreInput, creditosInput, cicloInput, anioInput);
+            list<Estudiante> listaInput;
+            grupos.insert( {siglasInput,listaInput} );
+            listaGrupos.push_back(grupoInput);
+            cout << "El grupo ha sido añadido exitosamente." << endl;
+            }
             break;
       }
   }
