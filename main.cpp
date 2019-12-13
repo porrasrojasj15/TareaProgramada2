@@ -47,8 +47,8 @@ int main(){
 
   Curso curso0("MA0291", "Mate", 5);
   cursos.push_back(curso0);
-  EstudianteBachi estudiante0("B12345","Pedro", 18, 1);
-  EstudianteBachi estudiante1("B54321","Juan", 19, 2);
+  EstudianteBachi estudiante0("B12345","Pedro", 18, 5);
+  EstudianteBachi estudiante1("B54321","Juan", 19, 1);
   list<Estudiante> listaEs;
   listaEs.push_back(estudiante0);
   listaEs.push_back(estudiante1);
@@ -120,8 +120,44 @@ int main(){
 
             break;
 
-          case 4:
+          case 4:{
+            cout << "Ingrese el carnet del estudiante: " << endl;
+            string carnetInput;
+            cin >> carnetInput;
 
+            cout << "Por favor ingrese el semestre de los cursos (I ó II):" << endl;
+            string cicloInput;
+            cin >> cicloInput;
+
+            cout << "Por favor ingrese el año de los cursos:" << endl;
+            int anioInput;
+            cin >> anioInput;
+
+            list<Grupo>::iterator itGrupos;
+            string siglasInput;
+
+            for (itGrupos = listaGrupos.begin(); itGrupos != listaGrupos.end(); itGrupos++){
+              if( cicloInput.compare( itGrupos->getCiclo() ) == 0 && anioInput == itGrupos->getAnio() ){
+                cout << "a" << endl;
+              //si el ciclo y año del grupo actual son los mismos que los ingresados por el usuario
+                siglasInput = itGrupos->getSigla(); //siglasInput es la sigla del grupo actual
+
+                if( !(grupos.find(siglasInput)->second.empty()) ){ //si la lista de estudiantes actual no está vacía
+                  cout << "b" << endl;
+                  list<Estudiante>::iterator itEstudiantes;
+
+                  for(itEstudiantes = grupos.find(siglasInput)->second.begin(); itEstudiantes != grupos.find(siglasInput)->second.end(); itEstudiantes++){
+                    cout << "c" << endl;
+                    if( carnetInput.compare( itEstudiantes->getCarnet() ) == 0 ){ //si el carnet proporcionado por el usuario es igual al del estudiante actual
+                      cout << "d" << endl;
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+
+            }
             break;
 
           case 5:
@@ -226,7 +262,8 @@ int main(){
             int edadInput;
             cin >> edadInput;
 
-            int becaInput = carnetInput.back() - '0';
+            int becaInput = carnetInput.back() - '0'; /* Se le resta el caracter de '0' para conseguir el verdaderos número.
+            Daría el mismo resultado si se le resta 48*/
             if(becaInput > 5){
               becaInput = 5;
             }
