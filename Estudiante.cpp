@@ -12,11 +12,11 @@ Estudiante::Estudiante(string carnet, string nombre, int edad, int beca){
     setCarnet(carnet);
     setNombre(nombre);
     setEdad(edad);
-    setBeca(beca);  
+    setBeca(beca);
 }
 
 ostream& operator<<(ostream& os,Estudiante& estudiante){
-    return os << "Nombre: " << estudiante.getNombre() << ", " << "Carnet: " << estudiante.getCarnet() << ", " << "edad: " << estudiante.getEdad()<< ". ";
+    return os << "Nombre: " << estudiante.getNombre() << ", " << "Carnet: " << estudiante.getCarnet() << ", " << "edad: " << estudiante.getEdad()<< ". " << endl;
 }
 
 Estudiante::~Estudiante(){
@@ -26,7 +26,7 @@ Estudiante::~Estudiante(){
 double Estudiante::pagoMatricula(){
     return 0;
 }
-        
+
 void Estudiante::setCostoCredito(double costoCredito){
     this->costoCredito = costoCredito;
 }
@@ -34,35 +34,35 @@ void Estudiante::setCostoCredito(double costoCredito){
 double Estudiante::getCostoCredito(){
     return costoCredito;
 }
-        
+
 void Estudiante::setCarnet(string carnet){
     this->carnet = carnet;
 }
-        
+
 string Estudiante::getCarnet(){
     return carnet;
 }
-        
+
 void Estudiante::setNombre(string nombre){
     this->nombre = nombre;
 }
-        
+
 string Estudiante::getNombre(){
     return nombre;
 }
-        
+
 void Estudiante::setCantidadCreditos(int cantidadCreditos){
     this->cantidadCreditos = cantidadCreditos;
 }
-        
+
 int Estudiante::getCantidadCreditos(){
     return cantidadCreditos;
 }
-        
+
 void Estudiante::setBeca(int beca){
     this->beca = beca;
 }
-        
+
 int Estudiante::getBeca(){
     return beca;
 }
@@ -70,7 +70,7 @@ int Estudiante::getBeca(){
 void Estudiante::setEdad(int edad){
     this->edad = edad;
 }
-        
+
 int Estudiante::getEdad(){
     return edad;
 }

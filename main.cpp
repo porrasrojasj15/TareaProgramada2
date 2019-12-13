@@ -15,10 +15,20 @@ int main(){
 
 
   deque<Curso> cursos;
-  map< Grupo, list<Estudiante> > grupos;
+  map< string, list<Estudiante> > grupos;
 
+  Curso curso0("MA0291", "Mate", 5);
+  cursos.push_back(curso0);
+  EstudianteBachi estudiante0("B12345","Pedro", 18, 1);
+  EstudianteBachi estudiante1("B54321","Juan", 19, 2);
+  list<Estudiante> listaEs;
+  listaEs.push_back(estudiante0);
+  listaEs.push_back(estudiante1);
+  Grupo grupo0("MA0291", "Mate", 5, "I", 2019);
+  string siglas0 = grupo0.getSigla();
+  grupos.insert( {siglas0, listaEs } );
 
-  int opcion;
+  long long opcion;
   cout << "1-Listar estudiantes." << endl;
   cout << "2-Imprimir información de los cursos." << endl;
   cout << "3-Calcular el cobro de matrícula de todos los estudiantes para un ciclo y año." << endl;
@@ -32,7 +42,7 @@ int main(){
   cout << "11-Agregar un grupo." << endl;
   cout << "12-Salir." << endl;
   while (opcion != 12){
-      cout << "¿Qué acción desea realizar (1-12)? ";
+      cout << "\n¿Qué acción desea realizar (1-12)? ";
       cin >> opcion;
       cout << endl;
       while(opcion < 1 || opcion > 12){
@@ -46,11 +56,10 @@ int main(){
               cout << "No existen grupos." << endl;
             }
             else{
-              map<Grupo, list<Estudiante> >::iterator itGrupos; //crea iterador
+              map<string, list<Estudiante> >::iterator itGrupos; //crea iterador
 
               for (itGrupos = grupos.begin(); itGrupos != grupos.end(); itGrupos++){
-                Grupo grupito = itGrupos->first; //se le nombra al valor del mapa como listaEstduiantes                
-                cout << grupito << endl; //Imprime los datos del cursos
+                cout << "Grupo " << itGrupos->first << ":" << endl; //Imprime los datos de los cursos
 
                 list<Estudiante> listaEstudiantes = itGrupos->second; //se le nombra al valor del mapa como listaEstduiantes
 
@@ -87,14 +96,16 @@ int main(){
           case 8:
             break;
           case 9:
+
             break;
           case 10:
+
             break;
           case 11:
+
             break;
       }
   }
-  cout << "El programa se cerrará." << endl;
-
+  cout << "El programa ha cerrado." << endl;
     return 0;
 }
