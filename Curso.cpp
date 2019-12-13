@@ -44,5 +44,5 @@ void Curso::setCreditos(int valor) {
 }
 
 ostream& operator<<(ostream& os,Curso& curso){
-    return os << "Siglas del curso: " << curso.getSigla() << "." << endl;
+    return os << "Siglas: " << curso.getSigla() << ", " << "Nombre: " << curso.getNombre() << ", " << "Creditos: " << curso.getCreditos() << ". " << endl;
 }
