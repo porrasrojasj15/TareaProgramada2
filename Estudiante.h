@@ -6,7 +6,7 @@
 using namespace std;
 
 class Estudiante{
-    protected:
+    private:
         string carnet;
         string nombre;
         int cantidadCreditos;
@@ -15,22 +15,21 @@ class Estudiante{
         double costoCredito;
     public:
         Estudiante();
-        ~Estudiante();
+        virtual ~Estudiante();
         Estudiante(string carnet, string nombre, int edad, int beca);
         virtual double pagoMatricula();
-        void setCostoCredito(double costoCredito);
-        double getCostoCredito();
-        void setCarnet(string carnet);
-        string getCarnet();
-        void setNombre(string nombre);
-        string getNombre();
-        void setCantidadCreditos(int cantidadCreditos);
-        int getCantidadCreditos();
-        void setBeca(int beca);
-        int getBeca();
-        void setEdad(int edad);
-        int getEdad();
-        friend ostream& operator<<(ostream& os, Estudiante& estudiante);
+        virtual void setCostoCredito(double costoCredito);
+        virtual double getCostoCredito();
+        virtual void setCarnet(string carnet);
+        virtual string getCarnet();
+        virtual void setNombre(string nombre);
+        virtual string getNombre();
+        virtual void setCantidadCreditos(int cantidadCreditos);
+        virtual int getCantidadCreditos();
+        virtual void setBeca(int beca);
+        virtual int getBeca();
+        virtual void setEdad(int edad);
+        virtual int getEdad();
 };
 
 #endif

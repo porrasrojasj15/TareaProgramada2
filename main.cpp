@@ -1,3 +1,4 @@
+
 #include "Estudiante.h"
 #include "EstudianteBachi.h"
 #include "EstudianteMaestria.h"
@@ -11,12 +12,36 @@
 using namespace std;
 
 int main(){
-  //aquí va la lectura
-
-
   deque<Curso> cursos;
-  map< string, list<Estudiante> > grupos;
-  list<Grupo> listaGrupos;
+  map< string, list<Estudiante*> > grupos;
+
+
+  ifstream archivo;
+
+    string ignorar;
+    string sigla;
+    string nombre;
+    int creditos;
+
+    archivo.open("cursos.txt", ios::in);
+    if(archivo.fail()){
+      cout << "No se puede abrir el archivo" << endl;
+      return -1;
+    }
+    getline(archivo, ignorar);
+    while(!archivo.eof()){
+      getline(archivo, sigla, ';');
+      getline(archivo, nombre, ';');
+      archivo >> creditos;
+      archivo.ignore();
+      Curso nuevoCurso;
+      nuevoCurso.setSigla(sigla);
+      nuevoCurso.setNombre(nombre);
+      nuevoCurso.setCreditos(creditos);
+      cursos.push_back(nuevoCurso);
+    }
+
+    archivo.close();
 
   Curso curso0("MA0291", "Mate", 5);
   cursos.push_back(curso0);
@@ -199,5 +224,5 @@ int main(){
       }
   }
   cout << "El programa ha cerrado." << endl;
-    return 0;
+  return 0;
 }
