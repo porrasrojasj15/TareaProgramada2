@@ -12,14 +12,18 @@
 using namespace std;
 
 int main(){
+//Estructuras de datos necesarias:
+
   deque<Curso> cursos;
   map< string, list<Estudiante> > grupos;
   list<Grupo> listaGrupos;
 
+//____________________________________________________________________________
 
+//Lectura de archivo:
   ifstream archivo;
 
-  string ignorar;
+  string ignorar; //línea inicial que debe ser ignorada
   string sigla;
   string nombre;
   string creditosString;
@@ -35,7 +39,7 @@ int main(){
     getline(archivo, nombre, ';');
     getline(archivo, creditosString, '\n');
     int creditos;
-    creditos = stoi(creditosString);
+    creditos = stoi(creditosString); //se hace casting al leer los créditos
     Curso nuevoCurso;
     nuevoCurso.setSigla(sigla);
     nuevoCurso.setNombre(nombre);
@@ -44,7 +48,9 @@ int main(){
   }
 
   archivo.close();
+//______________________________________________________________________________
 
+//Pruebas "quemadas", para probar funcionalidades más rápidamente:
   Curso curso0("MA0291", "Mate", 5);
   cursos.push_back(curso0);
   EstudianteBachi estudiante0("B12345","Pedro", 18, 5);
@@ -55,6 +61,10 @@ int main(){
   Grupo grupo0("MA0291", "Mate", 5, "I", 2019);
   string siglas0 = grupo0.getSigla();
   grupos.insert( {siglas0, listaEs } );
+//______________________________________________________________________________
+
+
+//Menú:
 
   long long opcion;
   cout << "1-Listar estudiantes." << endl;
@@ -69,17 +79,21 @@ int main(){
   cout << "10-Agregar un curso." << endl;
   cout << "11-Agregar un grupo." << endl;
   cout << "12-Salir." << endl;
-  while (opcion != 12){
+
+  while (opcion != 12){ //si elige la opción 12, sale del programa
       cout << "\n¿Qué acción desea realizar (1-12)? ";
       cin >> opcion;
       cout << endl;
-      while(opcion < 1 || opcion > 12){
+      while(opcion < 1 || opcion > 12){ //comprueba que el número sea una opción válida
           cout << "Por favor ingrese una opción válida (1-12): ";
           cin >> opcion;
           cout << endl;
       }
 
+//Switch para opciones del 1 al 11:
       switch (opcion){
+
+//Imprimir estudiantes. Imprime los grupos existentes en el programa con sus estudiantes correspondientes. Usa sobrecarga de operadores:
           case 1:
             if(grupos.empty()){
               cout << "No existen grupos." << endl;
@@ -103,6 +117,7 @@ int main(){
             }
             break;
 
+//Imprimir los cursos. Imprime las siglas de los cursos actualmente en el programa. Usa sobrecarga de operadores:
           case 2:
             if(cursos.empty()){
               cout << "No existen cursos." << endl;
@@ -120,6 +135,9 @@ int main(){
 
             break;
 
+/*Muestra los cursos en los que está inscrito un estudiante en un ciclo y año. Para todos los grupos en la lista de grupos que cumplan con el
+mismo ciclo y año que los indicados por el usuario, busca en el mapa los cursos correspondientes, revisa su lista de estudiantes relacionada
+y devuelve las siglas de aquellos cursos cuya lista de estudiantes tenga una coincidencia con el estudiante*/
           case 4:{
             cout << "Ingrese el carnet del estudiante: " << endl;
             string carnetInput;
@@ -138,16 +156,13 @@ int main(){
 
             for (itGrupos = listaGrupos.begin(); itGrupos != listaGrupos.end(); itGrupos++){
               if( cicloInput.compare( itGrupos->getCiclo() ) == 0 && anioInput == itGrupos->getAnio() ){
-                cout << "a" << endl;
               //si el ciclo y año del grupo actual son los mismos que los ingresados por el usuario
                 siglasInput = itGrupos->getSigla(); //siglasInput es la sigla del grupo actual
 
                 if( !(grupos.find(siglasInput)->second.empty()) ){ //si la lista de estudiantes actual no está vacía
-                  cout << "b" << endl;
                   list<Estudiante>::iterator itEstudiantes;
 
                   for(itEstudiantes = grupos.find(siglasInput)->second.begin(); itEstudiantes != grupos.find(siglasInput)->second.end(); itEstudiantes++){
-                    cout << "c" << endl;
                     if( carnetInput.compare( itEstudiantes->getCarnet() ) == 0 ){ //si el carnet proporcionado por el usuario es igual al del estudiante actual
                       cout << "d" << endl;
                       break;
@@ -164,6 +179,8 @@ int main(){
 
             break;
 
+/*Borra un grupo del programa. Efectúa operaciones de borrado tanto para el mapa de grupos como para la lista auxiliar de grupos.
+No efectúa esto si la lista de estudiantes de este grupo no está vacía. */
           case 6:{
             cout << "Por favor ingrese las siglas del curso a borrar:" << endl;
             string siglasInput;
@@ -190,6 +207,8 @@ int main(){
 
             break;
 
+/*Borra un curso del deque de cursos. Efectúa una operación de borrado sobre el elemento que coincida con las siglas proporcionadas por el usuario.
+No efectúa esto si el curso tiene grupos relacionados*/
           case 7:{
             cout << "Por favor ingrese las siglas del curso a borrar:" << endl;
             string siglasInput;
@@ -215,6 +234,8 @@ int main(){
 
             break;
 
+/*Borra a un estudiante de la lista de estudiantes de un grupo. Determina el tipo de beca y el grado de carrera que cursa el estudiante antes
+de añadirlo. No añade al estudiante si el grupo no existe.*/
           case 8:{
             cout << "Ingrese las siglas del grupo del que desee borrar al estudiante: " << endl;
             string siglasInput;
@@ -262,7 +283,7 @@ int main(){
             int edadInput;
             cin >> edadInput;
 
-            int becaInput = carnetInput.back() - '0'; /* Se le resta el caracter de '0' para conseguir el verdaderos número.
+            int becaInput = carnetInput.back() - '0'; /* Se le resta el caracter de '0' para conseguir el verdadero número.
             Daría el mismo resultado si se le resta 48*/
             if(becaInput > 5){
               becaInput = 5;
@@ -287,6 +308,7 @@ int main(){
             }
             break;
 
+//Añade un curso a el deque de cursos del programa.
           case 10:{
             cout << "Por favor ingrese las siglas del curso:" << endl;
             string siglasInput;
@@ -303,6 +325,7 @@ int main(){
             }
             break;
 
+//Añade un grupo para el curso con las siglas proporcionadas por el usuario.
           case 11:{
             cout << "Por favor ingrese las siglas del curso:" << endl;
             string siglasInput;
@@ -334,6 +357,7 @@ int main(){
             break;
       }
   }
+//______________________________________________________________________________
   cout << "El programa ha cerrado." << endl;
   return 0;
 }

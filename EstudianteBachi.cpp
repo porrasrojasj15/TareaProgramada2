@@ -2,13 +2,16 @@
 
 
     EstudianteBachi::EstudianteBachi():Estudiante(){
-        
+
     }
-        
+
     EstudianteBachi::EstudianteBachi(string carnet, string nombre, int edad, int beca):Estudiante(carnet, nombre, edad, beca){
-        
+
     }
-    
+    /**
+    @brief Establece el pago de la matricula de acorde a los créditos que lleva el estudiante, el costo de créditos y el tipo de beca
+    @returns El precio que tiene que pagar el estudiante por sus créditos
+    */
     double EstudianteBachi::pagoMatricula(){
         double pago = cantidadCreditos * costoCredito;
         if(getBeca() == 1){
