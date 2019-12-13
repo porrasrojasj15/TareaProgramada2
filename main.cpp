@@ -1,4 +1,3 @@
-
 #include "Estudiante.h"
 #include "EstudianteBachi.h"
 #include "EstudianteMaestria.h"
@@ -8,40 +7,43 @@
 #include <deque>
 #include <list>
 #include <map>
+#include <fstream>
 
 using namespace std;
 
 int main(){
   deque<Curso> cursos;
-  map< string, list<Estudiante*> > grupos;
+  map< string, list<Estudiante> > grupos;
+  list<Grupo> listaGrupos;
 
 
   ifstream archivo;
 
-    string ignorar;
-    string sigla;
-    string nombre;
+  string ignorar;
+  string sigla;
+  string nombre;
+  string creditosString;
+
+  archivo.open("cursos.txt", ios::in);
+  if(archivo.fail()){
+    cout << "No se puede abrir el archivo" << endl;
+    return -1;
+  }
+  getline(archivo, ignorar);
+  while(!archivo.eof()){
+    getline(archivo, sigla, ';');
+    getline(archivo, nombre, ';');
+    getline(archivo, creditosString, '\n');
     int creditos;
+    creditos = stoi(creditosString);
+    Curso nuevoCurso;
+    nuevoCurso.setSigla(sigla);
+    nuevoCurso.setNombre(nombre);
+    nuevoCurso.setCreditos(creditos);
+    cursos.push_back(nuevoCurso);
+  }
 
-    archivo.open("cursos.txt", ios::in);
-    if(archivo.fail()){
-      cout << "No se puede abrir el archivo" << endl;
-      return -1;
-    }
-    getline(archivo, ignorar);
-    while(!archivo.eof()){
-      getline(archivo, sigla, ';');
-      getline(archivo, nombre, ';');
-      archivo >> creditos;
-      archivo.ignore();
-      Curso nuevoCurso;
-      nuevoCurso.setSigla(sigla);
-      nuevoCurso.setNombre(nombre);
-      nuevoCurso.setCreditos(creditos);
-      cursos.push_back(nuevoCurso);
-    }
-
-    archivo.close();
+  archivo.close();
 
   Curso curso0("MA0291", "Mate", 5);
   cursos.push_back(curso0);
@@ -95,7 +97,7 @@ int main(){
 
                 cout << "Estudiantes:" << endl;
                 for (itEstudiantes = listaEstudiantes.begin(); itEstudiantes != listaEstudiantes.end(); itEstudiantes++){
-                  cout << *itEstudiantes; //Imprime los datos de los estudiantes
+                  cout << *itEstudiantes << endl; //Imprime los datos de los estudiantes
                 }
               }
             }
@@ -109,7 +111,7 @@ int main(){
               cout << "Lista de cursos: " << endl;
               deque<Curso>::iterator itCursos;
               for (itCursos = cursos.begin(); itCursos != cursos.end(); itCursos++){
-                cout << *itCursos << endl;
+                cout << *itCursos;
               }
             }
             break;
@@ -176,12 +178,78 @@ int main(){
             }
 
             break;
-          case 8:
 
-            break;
-          case 9:
+          case 8:{
+            cout << "Ingrese las siglas del grupo del que desee borrar al estudiante: " << endl;
+            string siglasInput;
+            cin >> siglasInput;
 
+            cout << "Ingrese el carnet del estudiante: " << endl;
+            string carnetInput;
+            cin >> carnetInput;
+
+            if(grupos.find(siglasInput) != grupos.end()){
+              list<Estudiante>::iterator itEstudiantes;
+
+              for (itEstudiantes = grupos.find(siglasInput)->second.begin(); itEstudiantes != grupos.find(siglasInput)->second.end(); itEstudiantes++){
+              // ^ recorre la lista de estudiantes accediendo desde el mapa, con la llave que coincide
+                if( carnetInput.compare( itEstudiantes->getCarnet() ) == 0 ){
+                  grupos.find(siglasInput)->second.erase(itEstudiantes);
+                  cout << "Se ha borrado el estudiante correctamente." << endl;
+                  break;
+                }
+              }
+            }
+
+            else{
+              cout << "No existe un grupo con esas siglas,la operación ha fallado." << endl;
+            }
+
+            }
             break;
+
+          case 9:{
+
+            cout << "Ingrese las siglas del grupo al que quiere añadir al estudiante: " << endl;
+            string siglasInput;
+            cin >> siglasInput;
+
+            cout << "Ingrese el carnet del estudiante: " << endl;
+            string carnetInput;
+            cin >> carnetInput;
+
+            cout << "Ingrese el nombre del estudiante: " << endl;
+            string nombreInput;
+            cin >> nombreInput;
+
+            cout << "Ingrese la edad del estudiante: " << endl;
+            int edadInput;
+            cin >> edadInput;
+
+            int becaInput = carnetInput.back() - '0';
+            if(becaInput > 5){
+              becaInput = 5;
+            }
+
+            if(edadInput <= 20){
+              EstudianteBachi estudianteInput(carnetInput,nombreInput,edadInput,becaInput);
+              grupos.find(siglasInput)->second.push_back(estudianteInput); //busca el grupo con esas siglas y añade al estudiante a este
+            }
+
+            else if(edadInput <= 22){
+              EstudianteMaestria estudianteInput(carnetInput,nombreInput,edadInput,becaInput);
+              grupos.find(siglasInput)->second.push_back(estudianteInput);
+            }
+
+            else{
+              EstudianteDoctorado estudianteInput(carnetInput,nombreInput,edadInput,becaInput);
+              grupos.find(siglasInput)->second.push_back(estudianteInput);
+            }
+
+            cout << "El estudiante se añadió exitosamente." << endl;
+            }
+            break;
+
           case 10:{
             cout << "Por favor ingrese las siglas del curso:" << endl;
             string siglasInput;
@@ -202,12 +270,18 @@ int main(){
             cout << "Por favor ingrese las siglas del curso:" << endl;
             string siglasInput;
             cin >> siglasInput;
-            cout << "Por favor ingrese el nombre del curso:" << endl;
             string nombreInput;
-            cin >> nombreInput;
-            cout << "Por favor ingrese la cantidad de créditos del curso:" << endl;
             int creditosInput;
-            cin >> creditosInput;
+            deque<Curso>::iterator itCursos;
+
+            for (itCursos = cursos.begin(); itCursos != cursos.end(); itCursos++){
+              if( siglasInput.compare( itCursos->getSigla() ) == 0 ){
+                nombreInput = itCursos->getNombre();
+                creditosInput = itCursos->getCreditos();
+                break;
+              }
+            }
+
             cout << "Por favor ingrese el semestre del curso (I ó II):" << endl;
             string cicloInput;
             cin >> cicloInput;
